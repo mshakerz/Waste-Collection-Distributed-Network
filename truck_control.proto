@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service TruckControl {
+  // gets the trucks needed for each house based on the amount of garbage they have
+  rpc GetTrucksNeeded (TruckNeedRequest) returns (TruckNeededResponse);
+
+}
+
+// request message for GetTrucksNeeded
+message TruckNeedRequest {
+ int32 request_id = 1; // way to identify the request
+ int32 house_id = 2; // identifier of rover
+ repeated int32 garbage_info = 3;  // list each percentage of trash generated so far
+
+
+}
+
+// response message for GetTrucksNeeded
+message TruckNeededResponse {
+ int32 request_id = 1; // way to identify the request
+ int32 house_id = 2; // identifier of rover
+ repeated bool trucks_needed = 1;  // list whether each truck is needed
+}
+
+
