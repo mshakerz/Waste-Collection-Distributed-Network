@@ -15,7 +15,7 @@ def setup_rabbitmq():
 # set up listening to the Truck Queue
 def run_rabbitmq_listener():
 
-# callback function to process mines from the Truck Queue
+# callback function to process trucks from the Truck Queue
 def rabbitmq_callback(ch, method, properties, body):
 
 # publishes trucks scheduled information to Scheduled Queue

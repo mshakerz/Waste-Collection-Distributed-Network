@@ -19,8 +19,7 @@ def publish_house_info_to_queue():
 #for any type of garbage generated
 def random_percentage_generator(previous_value):
 
-#reads the coordinates of the current house from the text file coordinates.txt and saves them
-#to global variable COORDINATES
+#reads the coordinates of the current house from the sql
 def get_house_coordinates(house_id):
 
 def run(house_id):
