@@ -1,4 +1,4 @@
-# Constants
+"""# Constants
 COORDINATES = {}
 
 grid_size = (10, 10)
@@ -26,4 +26,4 @@ def run(house_id):
 
 if __name__ == "__main__":
     house_id= int(sys.argv[1])
-    run(house_id)
+    run(house_id)"""
