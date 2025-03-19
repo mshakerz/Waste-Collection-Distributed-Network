@@ -6,7 +6,7 @@ import re
 MAX_DISTANCE = 15
 
 #stores the locations of all the houses
-HOUSE_GRID = []
+HOUSE_GRID = {}
 
 #stores the weekly schedule with each index including
 # 1. the truck type involved in the pickup
@@ -25,7 +25,7 @@ WEEKLY_SCHEDULE = {
 def setup_rabbitmq():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     channel = connection.channel()
-    channel.queue_declare(queue='Truck-Queue')
+    channel.queue_declare(queue='Truck-Queue', durable=True) #added true because of server
     return connection, channel
 
 # set up listening to the Truck Queue
@@ -59,11 +59,17 @@ def rabbitmq_callback(ch, method, properties, body):
 
     publish_truck_info_to_queue(request_id, house_id, trucks_needed,days_scheduled)
 
-# publishes trucks scheduled information to SQL
-def publish_truck_info_to_queue(request_id, house_id,truck_type,days_visiting):
-    # Insert data into schedule
-    cursor.execute("INSERT INTO schedule (request_id, house_id,truck_type,day_visiting) VALUES (?, ?,?,?)",
-                   (request_id, house_id, truck_type, days_visiting))
+#changed this up to convert to string not lists because SQLite3 can't handle lists
+def publish_truck_info_to_queue(request_id, house_id, truck_type, days_visiting):
+    # Convert lists to comma-separated strings
+    truck_type_str = ", ".join(truck_type) if isinstance(truck_type, list) else truck_type
+    days_visiting_str = ", ".join(days_visiting) if isinstance(days_visiting, list) else days_visiting
+
+    # Insert data into schedule table
+    cursor.execute("INSERT INTO schedule (request_id, house_id, truck_type, day_visiting) VALUES (?, ?, ?, ?)",
+                   (request_id, house_id, truck_type_str, days_visiting_str))
+    print(f"[Truck Scheduler] Inserted into schedule: Request ID {request_id}, House {house_id}, Trucks {truck_type_str}, Days {days_visiting_str}")
+
 
 
 #helper function to calculate the distance between 2 houses
@@ -142,4 +148,7 @@ def main():
     channel.start_consuming()
 
 if __name__ == "__main__":
+    #added this to debug if house coordinated loaded correctly
+    get_all_house_coordinates()
+    print(f"[Debug] Loaded house coordinates: {HOUSE_GRID}")
     main()
