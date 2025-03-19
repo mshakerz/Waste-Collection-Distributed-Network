@@ -1,6 +1,5 @@
-import pika
 import math
-import hashlib
+import pika
 from db import cursor
 import re
 #global variable for the max distance a truck can travel in a day
@@ -130,6 +129,17 @@ def get_current_schedule():
 
 # main function to set up the truck_scheduler
 def main():
+    # set up RabbitMQ connection and channel
+    connection, channel = setup_rabbitmq()
+
+    # set the scheduler to listen on the Truck-Queue and process incoming requests
+    print("Waiting for messages in Truck-Queue...")
+
+    # subscribe to the Truck-Queue to get requests
+    channel.basic_consume(queue='Truck-Queue',
+                          on_message_callback=lambda ch, method, properties, body: rabbitmq_callback(ch, method, properties,body))
+    # start listening for messages
+    channel.start_consuming()
 
 if __name__ == "__main__":
     main()
