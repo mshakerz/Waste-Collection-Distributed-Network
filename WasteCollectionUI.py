@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 import time
 from threading import Thread
+import pika
 
 GRID_SIZE = 10
 HOUSE_COUNT = 10

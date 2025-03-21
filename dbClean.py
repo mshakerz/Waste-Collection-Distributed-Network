@@ -14,4 +14,4 @@ cursor.execute("DELETE FROM sqlite_sequence WHERE name='map';")
 conn.commit()
 conn.close()
 
-print("✅ Database tables have been cleared.")
+print("Database tables have been cleared.")
