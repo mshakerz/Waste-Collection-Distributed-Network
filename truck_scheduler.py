@@ -1,7 +1,10 @@
 import math
 import pika
 from db import cursor
+from db import conn
 import re
+
+
 #global variable for the max distance a truck can travel in a day
 MAX_DISTANCE = 15
 
@@ -69,6 +72,7 @@ def publish_truck_info_to_queue(request_id, house_id, truck_type, days_visiting)
     # Insert data into schedule table
     cursor.execute("INSERT INTO schedule (request_id, house_id, truck_type, day_visiting) VALUES (?, ?, ?, ?)",
                    (request_id, house_id, truck_type_str, days_visiting_str))
+    conn.commit()
     print(f"[Truck Scheduler] Inserted into schedule: Request ID {request_id}, House {house_id}, Trucks {truck_type_str}, Days {days_visiting_str}")
 
 

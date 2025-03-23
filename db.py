@@ -18,8 +18,8 @@ cursor.execute("""
 CREATE TABLE schedule (
     request_id INTEGER PRIMARY KEY,
     house_id INTEGER,
-    truck_type TEXT[],
-    day_visiting TEXT[]
+    truck_type TEXT,
+    day_visiting TEXT
 )
 """)
 
@@ -36,8 +36,8 @@ CREATE TABLE map (
 # Insert data into schedule
 #acceptable values for truck_type is
 #Garbage , Recycling and Organic
-cursor.execute("INSERT INTO schedule (request_id, house_id,truck_type,day_visiting) VALUES (?, ?,?,?)",
-               (1, 101,"Waste", "Monday"))
+#cursor.execute("INSERT INTO schedule (request_id, house_id,truck_type,day_visiting) VALUES (?, ?,?,?)",
+    #           (1, 101,"Waste", "Monday"))
 
 # Insert data into map
 #house id --> 0 means home base of trucks
