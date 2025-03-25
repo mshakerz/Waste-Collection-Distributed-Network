@@ -84,8 +84,8 @@ def distance_between_houses (house_id_1,house_id_2):
 
     x1, y1 = HOUSE_GRID[house_id_1]
     x2, y2 = HOUSE_GRID[house_id_2]
-
-    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    #manhattan distance
+    return abs(x2 - x1) + abs(y2 - y1)
 
 
 #helper function to calculate the distance a truck is covering with the input houses
