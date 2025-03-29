@@ -30,7 +30,7 @@ class WasteCollectionUI:
                                 height=GRID_SIZE * CELL_SIZE, bg="white")
         self.canvas.pack(side=tk.LEFT, padx=10, pady=10)
 
-        # Right Panel (breaking up canvas for schedule and activity log)
+        # Right Panel (breaking up mainframe for schedule and activity log)
         self.right_panel = tk.Frame(self.main_frame)
         self.right_panel.pack(side=tk.RIGHT, padx=10)
 
@@ -74,22 +74,16 @@ class WasteCollectionUI:
 
     """ Loads map from DB """
     def load_houses_from_db(self):
-        # Loads house positions for those houses that are scheduled
+        # Loads house positions for all houses in neighbourhood
         conn = sqlite3.connect("my_database.db")
         cursor = conn.cursor()
 
-        # Get house IDs from schedule
-        cursor.execute("SELECT DISTINCT house_id FROM schedule")
-        scheduled_ids = set(row[0] for row in cursor.fetchall())
-
-        # Get house locations
+        # Get all house locations
+        cursor.execute("SELECT house_id, x_value, y_value FROM map")
         houses = {}
-        for house_id in scheduled_ids:
-            cursor.execute("SELECT x_value, y_value FROM map WHERE house_id = ?", (house_id,))
-            result = cursor.fetchone()
-            if result:
-                x, y = result
-                houses[house_id] = {"location": (x, y)}
+        for row in cursor.fetchall():
+            house_id, x, y = row
+            houses[house_id] = {"location": (x, y)}
 
         conn.close()
         return houses
@@ -163,16 +157,16 @@ class WasteCollectionUI:
                     schedule_data[day][waste_type].append(house_id)
 
         # Create chart to display schedule
-            for day in WEEK_DAYS:
-                day_data = schedule_data[day]
-                self.schedule_text.insert(tk.END, f"🗓 {day}\n", ("day",))
-                for waste_type in TRUCKS:
-                    houses = day_data[waste_type]
-                    if houses:
-                        house_list = ", ".join(f"House {h}" for h in sorted(houses))
-                        text = f"   - {waste_type}: {house_list}\n"
-                        self.schedule_text.insert(tk.END, text, waste_type)
-                    self.schedule_text.insert(tk.END, "\n")
+        for day in WEEK_DAYS:
+            day_data = schedule_data[day]
+            self.schedule_text.insert(tk.END, f"🗓 {day}\n", ("day",))
+            for waste_type in TRUCKS:
+                houses = day_data[waste_type]
+                if houses:
+                    house_list = ", ".join(f"House {h}" for h in sorted(houses))
+                    text = f"   - {waste_type}: {house_list}\n"
+                    self.schedule_text.insert(tk.END, text, waste_type)
+                self.schedule_text.insert(tk.END, "\n")
 
     """ Animates truck movement along scheduled path"""
     def move_truck(self, truck_icon, path):

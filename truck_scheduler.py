@@ -106,7 +106,7 @@ def schedule_truck_route(house_id, truck_needed):
             if truck == truck_needed:
                 temp_houses = houses
                 temp_houses.append(house_id)
-                print(f"Distance calculated if house were appended to this day:",truck_route_distance_if_house_added(temp_houses))
+                print(f"Distance calculated if house were appended to {day}:",truck_route_distance_if_house_added(temp_houses))
                 if truck_route_distance_if_house_added(temp_houses) < MAX_DISTANCE:
                     return day
     return 0
