@@ -38,9 +38,10 @@ def rabbitmq_callback(ch, method, properties, body):
 
     # If trucks are needed, send a truck request to the Truck Queue
     if trucks_needed:
+        print(f"[Server] Processed house {house_id}: Needed trucks {trucks_needed}")
         publish_truck_info_to_queue(house_id, trucks_needed)
 
-    print(f"[Server] Processed house {house_id}: Needed trucks {trucks_needed}")
+    #print(f"[Server] Processed house {house_id}: Needed trucks {trucks_needed}")
 
 
 # Function to publish truck request messages to the Truck Queue
@@ -52,7 +53,7 @@ def publish_truck_info_to_queue(house_id, trucks_needed):
     request_id = house_id  # Using house_id as a temporary request ID for simplicity
     message = f"Request ID: {request_id}, House ID: {house_id}, Truck Needed: {', '.join(trucks_needed)}"
     channel.basic_publish(exchange='', routing_key='Truck-Queue', body=message)
-    print(f"[Server] Published truck request for House {house_id}: {trucks_needed}")
+    print(f"[Server] Published truck request for House {house_id}: {trucks_needed}\n")
     connection.close()
 
 
