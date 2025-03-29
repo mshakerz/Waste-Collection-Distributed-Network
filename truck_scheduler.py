@@ -93,6 +93,7 @@ def truck_route_distance_if_house_added(houses):
     distance = 0
     distance += distance_between_houses(0, houses[0]) #add distance from base to house 1
     previous_house = houses[0]
+    
     for house in houses:
         distance += distance_between_houses(previous_house, house)
         previous_house = house

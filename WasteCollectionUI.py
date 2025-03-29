@@ -62,6 +62,7 @@ class WasteCollectionUI:
         # Create separate truck icons for each waste type
         self.truck_icons = {}
         for truck_type, color in TRUCKS.items():
+
             icon = self.canvas.create_text(BASE_LOCATION[0] * CELL_SIZE + 25,
                                            BASE_LOCATION[1] * CELL_SIZE + 25,
                                            text="🚛", font=("Arial", 16, "bold"),

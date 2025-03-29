@@ -63,6 +63,7 @@ def run_rabbitmq_listener():
     Listens for incoming messages from the Garbage Info Queue.
     When a message is received, it is processed by rabbitmq_callback().
     """
+
     connection, channel = setup_rabbitmq()
     channel.basic_consume(queue='Garbage-Info-Queue', on_message_callback=rabbitmq_callback, auto_ack=True)
     print("[Server] Listening for waste data from clients...")
